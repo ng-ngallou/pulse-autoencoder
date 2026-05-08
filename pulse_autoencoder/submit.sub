@@ -1,0 +1,13 @@
+# Using this file you can submit your list of simulations on HTCondor. (using sets of different argument values)
+# On the command line type: condor_submit submit.sub
+
+# You have to make some changes to the file before submitting it.
+
+executable              = /pulse-autoencoder/pulse_autoencoder/executable.sh
+output                  = output_$(ProcId).txt
+error                   = error_$(ProcId).txt
+log                     = log_$(ProcId).txt
+request_GPUs		        = 1
+request_CPUs            = 4
++MaxRunTime             = 120000
+queue
