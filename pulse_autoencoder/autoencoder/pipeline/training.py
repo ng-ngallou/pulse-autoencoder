@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import torch
@@ -9,11 +10,26 @@ from pulse_autoencoder.manipulate_data.load_data import prepare_data
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-train_loader, test_loader = prepare_data("/data/mixed/mixed_df.pkl")
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+
+DEFAULT_DATA_PATH = PROJECT_ROOT / "data" / "mixed" / "mixed_df.pkl"
+DEFAULT_MODEL_PATH = (
+    PROJECT_ROOT
+    / "pulse_autoencoder"
+    / "autoencoder"
+    / "model"
+    / "mixed_data_autoencoder.pth"
+)
+
 criterion = torch.nn.MSELoss()
 
 
-def train_autoencoder() -> None:
+def train_autoencoder(
+    data_path: Path = DEFAULT_DATA_PATH,
+    model_path: Path = DEFAULT_MODEL_PATH,
+) -> None:
+    train_loader, test_loader, _ = prepare_data(str(data_path))
+
     device = "cuda" if torch.cuda.is_available() else "cpu"  # "mps" for mac
 
     model = PulseAutoEncoder().to(device)
@@ -36,15 +52,22 @@ def train_autoencoder() -> None:
 
         logger.info(f"epoch {epoch} loss {total_loss/len(train_loader)}")
 
-    torch.save(model.state_dict(), "../model/mixed_data_autoencoder.pth")
+    model_path.parent.mkdir(parents=True, exist_ok=True)
+    torch.save(model.state_dict(), model_path)
+    logger.info(f"Model saved to {model_path}")
 
 
-def evaluate() -> None:
+def evaluate(
+    data_path: Path = DEFAULT_DATA_PATH,
+    model_path: Path = DEFAULT_MODEL_PATH,
+) -> None:
+    _, test_loader, _ = prepare_data(str(data_path))
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = PulseAutoEncoder()
     model.load_state_dict(
         torch.load(
-            "/pulse_autoencoder/autoencoder/model/mixed_data_autoencoder.pth",
+            model_path,
             map_location=device,
         )
     )

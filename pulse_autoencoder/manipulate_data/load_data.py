@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -6,6 +7,8 @@ import torch
 from scipy.interpolate import interp1d
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 def create_mixed_dataset(path: str) -> pd.DataFrame:
@@ -90,7 +93,10 @@ class SignalDataset(Dataset):
 
 
 if __name__ == "__main__":
-    path = "/data/"
-    df = create_mixed_dataset(path)
-    df.to_pickle("/data/mixed_df.pkl")
+    data_dir = PROJECT_ROOT / "data"
+    output_path = PROJECT_ROOT / "data" / "mixed_df.pkl"
+
+    df = create_mixed_dataset(str(data_dir))
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_pickle(output_path)
     print(df)

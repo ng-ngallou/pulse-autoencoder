@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,6 +11,17 @@ from pulse_autoencoder.autoencoder.model.autoencoder_model import PulseAutoEncod
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+
+DEFAULT_DATA_PATH = PROJECT_ROOT / "data" / "mixed" / "mixed_df.pkl"
+DEFAULT_MODEL_PATH = (
+    PROJECT_ROOT
+    / "pulse_autoencoder"
+    / "autoencoder"
+    / "model"
+    / "mixed_data_autoencoder.pth"
+)
 
 
 def preprocess_signal(signal: np.ndarray, target_len: int) -> torch.Tensor:
@@ -65,9 +77,9 @@ def rescale_reconstruction(
 
 
 def main() -> None:
-    data_path = "/data/mixed/mixed_df.pkl"
-    model_path = "/pulse_autoencoder/autoencoder/model/mixed_data_autoencoder.pth"
-    output = "df_classified_mixed_pulses.pkl"
+    data_path = DEFAULT_DATA_PATH
+    model_path = DEFAULT_MODEL_PATH
+    output = PROJECT_ROOT / "data" / "df_classified_mixed_pulses.pkl"
 
     percentile = None
     threshold_mse = 0.00005
@@ -107,6 +119,7 @@ def main() -> None:
     df["reconstruction_error"] = errors
     df["label"] = labels
     df["reconstruction"] = reconstructions
+    output.parent.mkdir(parents=True, exist_ok=True)
     df.to_pickle(output)
     logger.info(f"Labeled dataframe saved to {output}")
 

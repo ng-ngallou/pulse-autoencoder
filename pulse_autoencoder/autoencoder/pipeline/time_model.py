@@ -1,4 +1,5 @@
 import time
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -7,8 +8,16 @@ from scipy.interpolate import interp1d
 
 from pulse_autoencoder.autoencoder.model.autoencoder_model import PulseAutoEncoder
 
-DATA_PATH = "/data/mixed/mixed_df.pkl"
-MODEL_PATH = "/pulse_autoencoder/autoencoder/model/mixed_data_autoencoder.pth"
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+
+DATA_PATH = PROJECT_ROOT / "data" / "mixed" / "mixed_df.pkl"
+MODEL_PATH = (
+    PROJECT_ROOT
+    / "pulse_autoencoder"
+    / "autoencoder"
+    / "model"
+    / "mixed_data_autoencoder.pth"
+)
 THRESHOLD_MSE = 0.00005
 N_ITERATIONS = 1000
 
