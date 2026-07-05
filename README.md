@@ -14,13 +14,13 @@ pip install -e .
 
 ## Usage
 #### Prepare data
-python -m pulse_autoencoder.manipulate_data.load_data --data-dir ./data --output ./data/mixed/mixed_df.pkl
+```python -m pulse_autoencoder.manipulate_data.load_data --data-dir <input_path> --output <output_path>```
 
 #### Train
-train_autoencoder --data ./data/mixed/mixed_df.pkl
+```train_autoencoder --data <input_path>```
 
 #### Classify pulses
-python -m pulse_autoencoder.autoencoder.pipeline.predict --data ./data/mixed/mixed_df.pkl --model <path_to.pth>
+```python -m pulse_autoencoder.autoencoder.pipeline.predict --data <input_path> --model <path_to.pth>```
 
 
 ## Example Output
