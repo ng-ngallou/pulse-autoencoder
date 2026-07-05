@@ -2,7 +2,7 @@
 
 Unsupervised RF pulse anomaly detection using a 1D convolutional autoencoder. Trains on unlabeled, mostly-normal RF voltage pulses and flags anomalies (voltage breakdowns) by thresholding reconstruction error.
 
-> Trained model weights are excluded from the repo — ask for a demo.
+> Trained model weights are excluded from the repo.
 
 ## Install
 
